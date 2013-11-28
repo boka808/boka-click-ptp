@@ -1,0 +1,21 @@
+IFS=$'\n\t\0'
+
+CDIR=$(pwd)
+
+read -p "Where to start? " DIR
+cd $DIR
+read -p "Enter search term: " QUERY
+
+for FILE in $(ls -1)
+do
+  if [ -f $FILE ]
+  then
+    if cat $FILE | grep "$QUERY"
+    then
+      echo FILE: $FILE 
+      echo $(cat $FILE | grep "$QUERY")
+    fi
+  fi
+done
+
+cd $CDIR
