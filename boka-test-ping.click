@@ -15,7 +15,7 @@
 // the relevant device.) Also check out the contents of
 // /click/ping/summary.
 
-define($DEV eth1, $DADDR 131.179.80.139, $GW $DEV:gw)
+define($DEV eth1, $DADDR 127.0.0.1, $GW $DEV:gw)
 
 FromDevice($DEV)
 	-> c :: Classifier(12/0800, 12/0806 20/0002, -)
