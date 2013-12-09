@@ -33,7 +33,7 @@ tap	// -> Print(tap-in)
 // Take in from the classifier c[0]
 // strip off 14 bytes
 // check the ip header
-// output to the output to the ipclassifier (ipc)
+// print ipclassifier data using ipprint
 c[0]	-> Strip(14)
 	-> ch :: CheckIPHeader
 	-> ipc :: IPClassifier(icmp echo-reply, icmp echo, -)
