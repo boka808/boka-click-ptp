@@ -18,7 +18,9 @@
 define($DEV eth1, $DADDR 127.0.0.1, $GW $DEV:gw)
 
 FromDevice($DEV)
+	// Create a classifier
 	-> c :: Classifier(12/0800, 12/0806 20/0002, -)
+	// Check the IP Header
 	-> CheckIPHeader(14)
 	-> ip :: IPClassifier(icmp echo-reply, -)
 	-> ping :: ICMPPingSource($DEV, $DADDR,INTERVAL 1)
