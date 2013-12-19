@@ -5,7 +5,7 @@
 // Second 6 are src addr
 // Next 2 is type
 
-define($DEV eth3)
+define($DEV eth0)
 
 //d :: Discard;
 
@@ -50,7 +50,7 @@ ipc[1]
 	-> Print(ping-responding)
 	-> icmpr :: ICMPPingResponder
 	-> IPPrint(icmpr-ok)
-	-> EtherEncap(0x0800,eth3,$DEV)
+	-> EtherEncap(0x0800,$DEV,$DEV)
 	-> Print(ETHER-ENCAP)
 //	-> d;
 	-> q :: Queue
