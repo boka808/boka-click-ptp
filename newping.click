@@ -15,7 +15,7 @@ define($DEV eth0)
 	// Forward only packets matching 0x0800
 	// IP packets 0800
 	// ARP packets 0806
-	-> c :: Classifier(12/0800,12/0806);
+	-> c :: Classifier(12/0800,12/0806, -);
 //	-> IPPrint(classifier-ok)
 //	-> Classifier(12/0800) // IP packets
 //	-> d;
@@ -42,7 +42,7 @@ c[0]
 	-> Print(strip-ok)
 	-> CheckIPHeader
 	-> Print(checkip-ok)
-	-> ipc :: IPClassifier(icmp echo-reply, icmp echo)
+	-> ipc :: IPClassifier(icmp echo-reply, icmp echo, -)
 	-> IPPrint(ipc-ok)
 	-> d;
 
@@ -71,3 +71,6 @@ icmpr[1]
 //icmpr[0]
 //	-> Print(icmp-ok)
 //	-> d;
+
+c[2]	-> host;
+ipc[2]	-> host;
