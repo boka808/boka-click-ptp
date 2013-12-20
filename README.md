@@ -15,3 +15,9 @@ Files
     requesting machine.
 
   * Will be revised in the future to a version without debug prints
+
+* linkhelp.txt
+
+  * A description of how to use the hard link command
+
+  * Useful for hosting files in git and using them in click
