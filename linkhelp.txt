@@ -1,2 +1,7 @@
 # make a hard link
 ln [target] [linkname]
+
+
+# Hard links can be placed in the click/conf/ directory
+# This allows the file to be hosted in a git repository
+# while also being accessible by click for configuration
