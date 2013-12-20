@@ -34,7 +34,9 @@ tap	// -> Print(tap-in)
 // strip off 14 bytes
 // check the ip header
 // print ipclassifier data using ipprint
-c[0]	-> Strip(14)
+c[0]	-> Print(BEFORE-STRIPPING-HEADER)
+	-> Strip(14)
+	-> Print(AFTER-STRIPPING-HEADER)
 	-> ch :: CheckIPHeader
 	-> ipc :: IPClassifier(icmp echo-reply, icmp echo, -)
 	-> IPPrint(tap-ok)
@@ -56,5 +58,6 @@ ch[1]	-> Print(tap-bad)
 
 // Output the classifier c[1] to ARPResponder
 // output to tap
-c[1]	-> ARPResponder(0/0 tap_local)
+c[1]	-> Print(ARPResponder)
+	-> ARPResponder(0/0 tap_local)
 	-> tap;
