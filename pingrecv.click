@@ -47,7 +47,8 @@ ipc[1]
 	-> Print(ping-responding)
 	-> icmpr :: ICMPPingResponder
 	-> IPPrint(icmpr-ok)
-	-> EtherEncap(0x0800,$DEV,$DEV)
+	-> EtherEncap(0x0800,$DEV,8:0:27:b8:bd:f2)
+	-> EnsureEther
 	-> Print(ETHER-ENCAP)
 //	-> d;
 	-> q :: Queue
