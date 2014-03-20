@@ -12,32 +12,27 @@
 // Second 6 are src addr
 // Next 2 is type
 
-define($DEV eth0)
+define($DEV eth0, $GW $DEV:gw)
 
 FromDevice($DEV)
 	-> Print(recv-ok)
 	// Forward only packets matching 0x0800
 	// IP packets 0800
 	// ARP packets 0806
-	-> c :: Classifier(12/0800,12/0806);
-
-// Handle all packets with type 0x0806
-c[1]	-> t :: Tee
-	-> d :: Discard;
-t[1]	-> host :: ToHost;
+	-> c :: Classifier(12/0800,12/0806 20/0002,12/0806 20/0001, -);
 
 // Handle all packets with type 0x0800
 c[0]
-	-> Print(IP-ok)
-	-> Print(BEFORE-STRIPPING-HEADER)
+//	-> Print(IP-ok)
+//	-> Print(BEFORE-STRIPPING-HEADER)
 	-> Strip(14)
-	-> Print(AFTER-STRIPPING-HEADER)
-	-> Print(strip-ok)
+//	-> Print(AFTER-STRIPPING-HEADER)
+//	-> Print(strip-ok)
 	-> CheckIPHeader
 	-> Print(checkip-ok)
 	-> ipc :: IPClassifier(icmp echo-reply, icmp echo)
-	-> IPPrint(ipc-ok)
-	-> d;
+//	-> IPPrint(ipc-ok)
+//	-> d :: Discard;
 
 // Respond to packets of ICMP type
 ipc[1]
@@ -45,9 +40,12 @@ ipc[1]
 	-> icmpr :: ICMPPingResponder
 	-> IPPrint(icmpr-ok)
 	// Re-add the header stripped
-	-> Unstrip(14)
+//*	-> Unstrip(14)
 	// Switch src macaddr with dst macaddr
-	-> EtherMirror
+//*	-> EtherMirror
+	-> SetIPAddress($GW)
+	-> arpq :: ARPQuerier($DEV)
+	-> IPPrint
 	// Make sure the frame matches ether
 	-> EnsureEther
 	-> Print(ETHER-ENCAP)
@@ -55,8 +53,21 @@ ipc[1]
 	-> { input -> t :: PullTee -> output; t[1] -> ToHostSniffers($DEV) }
 	-> Print(GOING)
 	-> ToDevice($DEV);
+arpq[1] -> q;
+
+// Handle all packets with type 0x0806
+c[1]	-> t :: Tee
+	-> [1] arpq;
+t[1]	-> host :: ToHost;
+c[2]	-> arpr :: ARPResponder($DEV)
+	-> Print(ARPResponse)
+	-> q;
+arpr[1] -> host;
+c[3]	-> Print(PASS-TO-HOST)
+	-> host;
+ipc[0]	-> host;
 
 // Log non-icmp response packets
 icmpr[1]
 	-> Print(icmp1-NONICMP)
-	-> d;
+	-> host;
