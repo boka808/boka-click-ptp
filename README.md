@@ -6,15 +6,20 @@ boka-click-ptp
 Files
 -----
 
-* newping.click
+* pingrecv.click
 
-  * An implementation of a ping responder
+  * The new implementation of an ICMP ping responder
 
-  * Implementation seems to send response as seen by wireshark
-    on responding machine, but does not currently reach the
-    requesting machine.
+  * Uses ARPQuerier to check for the original device's IP address.
+    This replaces the Ethermirror in a previous build.
+    Rather than switching the source and destination addresses in the
+    packet, the ARPQuerier sets the return address for the packet
+    created by ICMPPingResponder.
 
-  * Will be revised in the future to a version without debug prints
+  * To run the command properly:
+    click-install pingrecv.click DEV=[eth#] GW=[ipaddr.of.gw.device]
+
+* newping.click (DEPRECATED)
 
 * linkhelp.txt
 
