@@ -19,6 +19,9 @@ Files
   * To run the command properly:
     click-install pingrecv.click DEV=[eth#] GW=[ipaddr.of.gw.device]
 
+  * To run the corresponding test-ping.click command:
+    click-install test-ping.click DEV=[eth#] DADDR=[dest_ip] GW=[gw_ip]
+
 * newping.click (DEPRECATED)
 
 * linkhelp.txt
