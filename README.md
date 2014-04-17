@@ -24,13 +24,13 @@ Files
 
 * conf/reference/newping.click (DEPRECATED)
 
-* linkhelp.txt
+* ref/linkhelp.txt
 
   * A description of how to use the hard link command
 
   * Useful for hosting files in git and using them in click
 
-* search.h4x
+* ref/search.h4x
 
   * A script to help search for usage of classes in click/conf
 
