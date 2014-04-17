@@ -6,7 +6,7 @@ boka-click-ptp
 Files
 -----
 
-* pingrecv.click
+* conf/icmp/pingrecv.click
 
   * The new implementation of an ICMP ping responder
 
@@ -22,10 +22,17 @@ Files
   * To run the corresponding test-ping.click command:
     click-install test-ping.click DEV=[eth#] DADDR=[dest_ip] GW=[gw_ip]
 
-* newping.click (DEPRECATED)
+* conf/reference/newping.click (DEPRECATED)
 
 * linkhelp.txt
 
   * A description of how to use the hard link command
 
   * Useful for hosting files in git and using them in click
+
+* search.h4x
+
+  * A script to help search for usage of classes in click/conf
+
+  * To use, run search.h4x; prompts will ask for location and string
+    to match.
