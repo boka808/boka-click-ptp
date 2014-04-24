@@ -3,6 +3,28 @@ boka-click-ptp
 
 * Configuration and element files
 
+
+Network config
+--------------
+
+* When using the configurations on an internal network, it is important
+  to have the correct network configurations.
+
+* Set up the gateway address of the internal network.
+
+  1. Find the interface name by using ifconfig.
+
+  2. Edit the /etc/network/interfaces file and set the interface to
+     static.  For Ubuntu Virtual Box, it should look something like this:
+
+```
+     auto eth0
+     iface eth0 inet static
+     address 10.13.14.101
+     netmask 255.255.255.0
+     gateway 10.13.14.102
+```
+
 Files
 -----
 
