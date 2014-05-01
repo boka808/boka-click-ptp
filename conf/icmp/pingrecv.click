@@ -16,55 +16,51 @@ define($DEV eth0, $GW $DEV:gw)
 
 FromDevice($DEV)
 	-> Print(recv-ok)
-	// Forward only packets matching 0x0800
 	// IP packets 0800
 	// ARP packets 0806
 	-> c :: Classifier(12/0800,12/0806 20/0002,12/0806 20/0001, -);
 
 // Handle all packets with type 0x0800
 c[0]
-//	-> Print(IP-ok)
-//	-> Print(BEFORE-STRIPPING-HEADER)
 	-> Strip(14)
-//	-> Print(AFTER-STRIPPING-HEADER)
-//	-> Print(strip-ok)
 	-> CheckIPHeader
-	-> Print(checkip-ok)
 	-> ipc :: IPClassifier(icmp echo-reply, icmp echo)
-//	-> IPPrint(ipc-ok)
-//	-> d :: Discard;
 
 // Respond to packets of ICMP type
 ipc[1]
-	-> Print(ping-responding)
 	-> icmpr :: ICMPPingResponder
-	-> IPPrint(icmpr-ok)
-	// Re-add the header stripped
-//*	-> Unstrip(14)
-	// Switch src macaddr with dst macaddr
-//*	-> EtherMirror
 	-> SetIPAddress($GW)
 	-> arpq :: ARPQuerier($DEV)
 	-> IPPrint
 	// Make sure the frame matches ether
 	-> EnsureEther
-	-> Print(ETHER-ENCAP)
 	-> q :: Queue
+	// packet can be picked up by a sniffer
 	-> { input -> t :: PullTee -> output; t[1] -> ToHostSniffers($DEV) }
-	-> Print(GOING)
+	-> Print(ICMPResponse)
 	-> ToDevice($DEV);
+
+// APR queries go to queue
 arpq[1] -> q;
 
 // Handle all packets with type 0x0806
 c[1]	-> t :: Tee
 	-> [1] arpq;
+
 t[1]	-> host :: ToHost;
+
+// Handle ARP request packets
 c[2]	-> arpr :: ARPResponder($DEV)
 	-> Print(ARPResponse)
-	-> q;
+	-> q;	// ARP Response goes to queue
+
 arpr[1] -> host;
+
+// All "other" traffic routed back to host
 c[3]	-> Print(PASS-TO-HOST)
 	-> host;
+
+// echo-reply goes to host
 ipc[0]	-> host;
 
 // Log non-icmp response packets
